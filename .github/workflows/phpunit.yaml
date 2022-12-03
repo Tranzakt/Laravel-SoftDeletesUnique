@@ -22,40 +22,51 @@ defaults:
 
 jobs:
     unit-tests:
-        name: PHPUnit Lar ${{ matrix.laravel-version }} PHP ${{ matrix.php-version }} Ver ${{ matrix.prefer }}
+        name: PHPUnit Lar ${{ matrix.laravel-version }} PHP ${{ matrix.php-version }} Ver ${{ matrix.composer-prefer }}
         runs-on: ubuntu-latest
         timeout-minutes: 5
         strategy:
             matrix:
-                laravel-version:
-                    -   "^8.0"
-                    -   "^9.0"
-                    -   "^10.0"
+                laravel-php-version:
+                    -   "^8.0,7.4"
+                    -   "^8.0,8.0"
+                    -   "^8.0,8.1"
+                    -   "^9.0,8.0"
+                    -   "^9.0,8.1"
+                    -   "^9.0,8.2"
+                    -   "^10.0,8.1"
+                    -   "^10.0,8.2"
                 composer-prefer:
-                    -   composer-prefer: ""
-                        prefer: latest
-                    -   composer-prefer: "--prefer-lowest --prefer-stable"
-                        prefer: earliest
-                coverage:
+                    -   ""
+                    -   "--prefer-lowest --prefer-stable"
+            coverage:
                     -   xdebug
                 phpunit-flags:
                     -   '--coverage-clover coverage.xml'
                 include:
-                    -   laravel-version: "^8.0"
+                    -   laravel-php-version: "^8.0,7.4"
+                        laravel-version: "^8.0"
                         php-version: "7.4"
-                    -   laravel-version: "^8.0"
+                    -   laravel-php-version: "^8.0,8.0"
+                        laravel-version: "^8.0"
                         php-version: "8.0"
-                    -   laravel-version: "^8.0"
+                    -   laravel-php-version: "^8.0,8.1"
+                        laravel-version: "^8.0"
                         php-version: "8.1"
-                    -   laravel-version: "^9.0"
+                    -   laravel-php-version: "^9.0,8.0"
+                        laravel-version: "^9.0"
                         php-version: "8.0"
-                    -   laravel-version: "^9.0"
+                    -   laravel-php-version: "^9.0,8.1"
+                        laravel-version: "^9.0"
                         php-version: "8.1"
-                    -   laravel-version: "^9.0"
+                    -   laravel-php-version: "^9.0,8.2"
+                        laravel-version: "^9.0"
                         php-version: "8.2"
-                    -   laravel-version: "^10.0"
+                    -   laravel-php-version: "^10.0,8.1"
+                        laravel-version: "^10.0"
                         php-version: "8.1"
-                    -   laravel-version: "^10.0"
+                    -   laravel-php-version: "^10.0,8.2"
+                        laravel-version: "^10.0"
                         php-version: "8.2"
         steps:
             -   name: Checkout
