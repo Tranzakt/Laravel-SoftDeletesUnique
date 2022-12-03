@@ -66,6 +66,9 @@ jobs:
                         ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-
                         ${{ runner.os }}-PHP-${{ matrix.php-version }}-
 
+            -   name: Require Laravel Framework ${{ matrix.laravel-version}}
+                run: composer require laravel./framework:${{ matrix.laravel-version }} ${{ matrix.composer-prefer }}
+
             -   name: Install dependencies
                 run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}
 
