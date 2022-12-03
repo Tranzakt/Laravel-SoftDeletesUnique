@@ -28,77 +28,77 @@ jobs:
         strategy:
             matrix:
                 laravel-php-version:
-                    -   "L8,P7.4,earliest"
-                    -   "L8,P7.4,latest"
-                    -   "L8,P8.0,earliest"
-                    -   "L8,P8.0,latest"
-                    -   "L8,P8.1,earliest"
-                    -   "L8,P8.1,latest"
-                    -   "L9,P8.0,earliest"
-                    -   "L9,P8.0,latest"
-                    -   "L9,P8.1,earliest"
-                    -   "L9,P8.1,latest"
-                    -   "L9,P8.2,earliest"
-                    -   "L9,P8.2,latest"
-                    -   "L10,P8.1,latest"
-                    -   "L10,P8.2,latest"
+                    -   "L8/P7.4/earliest"
+                    -   "L8/P7.4/latest"
+                    -   "L8/P8.0/earliest"
+                    -   "L8/P8.0/latest"
+                    -   "L8/P8.1/earliest"
+                    -   "L8/P8.1/latest"
+                    -   "L9/P8.0/earliest"
+                    -   "L9/P8.0/latest"
+                    -   "L9/P8.1/earliest"
+                    -   "L9/P8.1/latest"
+                    -   "L9/P8.2/earliest"
+                    -   "L9/P8.2/latest"
+                    -   "L10/P8.1/latest"
+                    -   "L10/P8.2/latest"
                 coverage:
                     -   xdebug
                 phpunit-flags:
                     -   '--coverage-clover coverage.xml'
                 include:
-                    -   laravel-php-version: "L8,P7.4,earliest"
+                    -   laravel-php-version: "L8/P7.4/earliest"
                         laravel-version: "^8.0"
                         php-version: "7.4"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L8,P7.4,latest"
+                    -   laravel-php-version: "L8/P7.4/latest"
                         laravel-version: "^8.0"
                         php-version: "7.4"
                         composer-prefer: ""
-                    -   laravel-php-version: "L8,P8.0,earliest"
+                    -   laravel-php-version: "L8/P8.0/earliest"
                         laravel-version: "^8.0"
                         php-version: "8.0"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L8,P8.0,latest"
+                    -   laravel-php-version: "L8/P8.0/latest"
                         laravel-version: "^8.0"
                         php-version: "8.0"
                         composer-prefer: ""
-                    -   laravel-php-version: "L8,P8.1,earliest"
+                    -   laravel-php-version: "L8/P8.1/earliest"
                         laravel-version: "^8.0"
                         php-version: "8.1"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L8,P8.1,latest"
+                    -   laravel-php-version: "L8/P8.1/latest"
                         laravel-version: "^8.0"
                         php-version: "8.1"
                         composer-prefer: ""
-                    -   laravel-php-version: "L9,P8.0,earliest"
+                    -   laravel-php-version: "L9/P8.0/earliest"
                         laravel-version: "^9.0"
                         php-version: "8.0"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L9,P8.0,latest"
+                    -   laravel-php-version: "L9/P8.0/latest"
                         laravel-version: "^9.0"
                         php-version: "8.0"
                         composer-prefer: ""
-                    -   laravel-php-version: "L9,P8.1,earliest"
+                    -   laravel-php-version: "L9/P8.1/earliest"
                         laravel-version: "^9.0"
                         php-version: "8.1"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L9,P8.1,latest"
+                    -   laravel-php-version: "L9/P8.1/latest"
                         laravel-version: "^9.0"
                         php-version: "8.1"
                         composer-prefer: ""
-                    -   laravel-php-version: "L9,P8.2,earliest"
+                    -   laravel-php-version: "L9/P8.2/earliest"
                         laravel-version: "^9.0"
                         php-version: "8.2"
                         composer-prefer: "--prefer-lowest --prefer-stable"
-                    -   laravel-php-version: "L9,P8.2,latest"
+                    -   laravel-php-version: "L9/P8.2/latest"
                         laravel-version: "^9.0"
                         php-version: "8.2"
                         composer-prefer: ""
-                    -   laravel-version: "L10,P8.1,latest"
+                    -   laravel-version: "L10/P8.1/latest"
                         php-version: "8.1"
                         composer-prefer: ""
-                    -   laravel-version: "L10,P8.2,latest"
+                    -   laravel-version: "L10/P8.2/latest"
                         php-version: "8.2"
                         composer-prefer: ""
         steps:
@@ -119,11 +119,9 @@ jobs:
                 uses: actions/cache@v3
                 with:
                     path: vendor
-                    key: ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-prefer-${{ matrix.composer-prefer }}-${{ hashFiles('**/composer.lock') }}
+                    key: ${{ runner.os }}-Ver-${{ matrix.laravel-php-version }}-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
-                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-prefer-${{ matrix.composer-prefer }}-
-                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-
-                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-
+                        ${{ runner.os }}-Ver-${{ matrix.laravel-php-version }}-
 
             -   name: Require Laravel Framework ${{ matrix.laravel-version}}
                 run: composer require laravel/framework:${{ matrix.laravel-version }} ${{ matrix.composer-prefer }}
