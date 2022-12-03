@@ -39,7 +39,7 @@ jobs:
                 composer-prefer:
                     -   ""
                     -   "--prefer-lowest --prefer-stable"
-            coverage:
+                coverage:
                     -   xdebug
                 phpunit-flags:
                     -   '--coverage-clover coverage.xml'
