@@ -21,7 +21,7 @@ then you want the model to behave the same as if you had hard deleted it
 and still allow you to create a new (non-deleted) record for 'Pete'
 alongside the deleted version.
 You therefore want the combination of `deleted_at` and `name` to be unique,
-so you create a unique index on ['deleted_at', 'name'] expecting it to prevent duplicates,
+so you create a unique index on `['deleted_at', 'name']` expecting it to prevent duplicates,
 i.e. in your migration...
 
 ``` php
@@ -49,7 +49,7 @@ to have multiple rows [null, 'Pete']!!!
 
 It does it by creating a new column `deleted_at_uniqueable`
 which is maintained as a string version of the `deleted_at` column;
-using the empty string '' if the `deleted_at` column is null.
+using the empty string `''` if the `deleted_at` column is null.
 
 Your code now needs to look as follows:
 
@@ -132,7 +132,7 @@ The `softDeletesUnique` and `dropSoftDeletesUnique` methods are macroed into Blu
 
 `$table->softDeletesUnique();` creates a new non-nullable string column
 `deleted_at_uniqueable` of up to 24 characters
-(format 'YYYYMMDD HH:MM:SS.xxxxxx'),
+(format 'YYYY-MM-DD HH:MM:SS.xxxxxx'),
 that contains either '' when `deleted_at` is null, or a string representation if it is not null.
 
 The `HasSoftDeletesUnique` trait creates observers on the creating, updating, deleting and restoring Eloquent actions

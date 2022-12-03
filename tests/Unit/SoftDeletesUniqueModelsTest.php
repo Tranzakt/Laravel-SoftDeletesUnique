@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Tranzakt\SoftDeletesUnique\Tests\Unit;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use Tranzakt\SoftDeletesUnique\Tests\Models\TestModelSoftDeletesUnique;
 use Tranzakt\SoftDeletesUnique\Tests\Testcases\TestCaseSoftDeletesUnique;
 
@@ -98,10 +98,39 @@ class SoftDeletesUniqueModelTests extends TestCaseSoftDeletesUnique
         $this->checkRowCounts(1, 1, 0);
 
         // Attempt to create duplicate record
-        $this->expectException(\Illuminate\Database\QueryException::class);
-        $model = TestModelSoftDeletesUnique::create([
+        $e = null;
+        try {
+            TestModelSoftDeletesUnique::create([
+                'field' => 'value1'
+            ]);
+        } catch (\Exception $e) {}
+        $this->assertInstanceOf(QueryException::class, $e);
+    }
+
+    /**
+     * Create identical active and deleted records, then try to restore the deleted one.
+     */
+    public function testSoftDeletesUniqueModelRestoreFail()
+    {
+        $this->createTable($this->tableName);
+
+        TestModelSoftDeletesUnique::create([
+            'field' => 'value1'
+        ])->delete();
+        $this->checkRowCounts(1, 0, 1);
+        TestModelSoftDeletesUnique::create([
             'field' => 'value1'
         ]);
-
-    }
+        $this->checkRowCounts(2, 1, 1);
+        $row = TestModelSoftDeletesUnique::onlyTrashed()->first();
+        $e = null;
+        try {
+            $row->restore(); // Should fail
+        } catch (\Exception $e) {}
+        $this->assertInstanceOf(QueryException::class, $e);
+        $this->checkRowCounts(2, 1, 1);
+        $row = TestModelSoftDeletesUnique::onlyTrashed()->first();
+        $this->assertNotEquals($row->deleted_at_uniqueable, '');
+        $this->assertNotNull($row->deleted_at);
+   }
 }

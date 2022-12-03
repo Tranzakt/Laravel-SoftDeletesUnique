@@ -73,9 +73,12 @@ final class SoftDeletesUniqueModelsTest extends TestCaseSoftDeletesUnique
     public function testSoftDeleteUnique_negativePrecision(): void
     {
         // Negative precision should fail
-        $this->expectException(\ValueError::class);
         $tableName = 'table_softdeleteunique_invalidprecision';
-        $columns = $this->createTable($tableName, precision: -1);
+        $e = null;
+        try {
+            $columns = $this->createTable($tableName, precision: -1);
+        } catch (\Exception $e) {}
+        $this->assertInstanceOf(\ValueError::class, $e);
     }
 
     /**
@@ -122,11 +125,14 @@ final class SoftDeletesUniqueModelsTest extends TestCaseSoftDeletesUnique
         $this->assertEquals(count($rows), 3);
 
         // Insert of duplicate empty uniqueable should fail
-        $this->expectException(QueryException::class);
-        DB::table($tableName)->insert([
-            'field'=> 'value1',
-            'deleted_at' => null,
-            'deleted_at_uniqueable' => ''
-        ]);
+        $e = null;
+        try {
+            DB::table($tableName)->insert([
+                'field'=> 'value1',
+                'deleted_at' => null,
+                'deleted_at_uniqueable' => ''
+            ]);
+        } catch (\Exception $e) {}
+        $this->assertInstanceOf(QueryException::class, $e);
     }
 }
