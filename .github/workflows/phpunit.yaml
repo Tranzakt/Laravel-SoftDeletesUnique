@@ -22,7 +22,7 @@ defaults:
 
 jobs:
     unit-tests:
-        name: Unit Tests - PHP ${{ matrix.php-version }}
+        name: PHPUnit PHP ${{ matrix.php-version }} Laravel ${{ matrix.laravel-version }} Prefer ${{ matrix.composer-prefer }}
         runs-on: ubuntu-latest
         timeout-minutes: 5
         strategy:
@@ -57,13 +57,14 @@ jobs:
 
             -   name: Cache Composer packages
                 id: composer-cache
-                uses: actions/cache@v2
+                uses: actions/cache@v3
                 with:
                     path: vendor
-                    key: |
-                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-prefer-${{ matrix.composer-prefer }}$-${{ hashFiles('**/composer.lock') }}
+                    key: ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-prefer-${{ matrix.composer-prefer }}-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-prefer-${{ matrix.composer-prefer }}-
+                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-Laravel-${{ matrix.laravel-version }}-
+                        ${{ runner.os }}-PHP-${{ matrix.php-version }}-
 
             -   name: Install dependencies
                 run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" ${{ matrix.composer-prefer }}
