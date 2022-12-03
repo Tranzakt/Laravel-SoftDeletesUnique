@@ -1,0 +1,59 @@
+{
+    "name": "tranzakt/laravel-softdeletesunique",
+    "description": "Package to allow correct unique indexing of null softDelete deleted_at columns.",
+    "keywords": [
+        "laravel",
+        "deleted_at",
+        "timestamps"
+    ],
+    "homepage": "https://github.com/tranzakt/laravel-softdeletesunique",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tranzakt",
+            "email": "laravel.tranzakt@gmail.com",
+            "homepage": "https://github.com/Tranzakt",
+            "role": "Organization"
+        },
+        {
+            "name": "Sophist",
+            "email": "sophist.uk@gmail.com",
+            "homepage": "https://github.com/Sophist-UK",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "laravel/framework": "^5.6|^6.0|^7.0|^8.0|^9.0|^10.0"
+    },
+    "require-dev": {
+        "doctrine/dbal": "^3.0",
+        "phpunit/phpunit": "^7.5|^8.0|^9.0",
+        "orchestra/testbench": "^7.0"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Tranzakt\\SoftDeletesUnique\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tranzakt\\SoftDeletesUnique\\Tests\\": "tests/"
+        },
+        "files": [
+            "tests/Testcases/TestCaseSoftDeletesUnique.php"
+        ]
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tranzakt\\softDeletesUnique\\softDeletesUniqueServiceProvider"
+            ]
+        }
+    }
+}

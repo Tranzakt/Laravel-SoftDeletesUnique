@@ -1,0 +1,32 @@
+{
+    "phpfmt.indent_with_space": 4,
+    "phpfmt.detect_indent": true,
+    "phpfmt.enable_auto_align": true,
+    "phpfmt.psr1": true,
+    "phpfmt.psr1_naming": true,
+    "phpfmt.smart_linebreak_after_curly": true,
+    "editor.stickyTabStops": true,
+    "editor.detectIndentation": false,
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.fontLigatures": false,
+    "phpfmt.yoda": false,
+    "namespaceResolver.sortAlphabetically": true,
+    "namespaceResolver.sortNatural": true,
+    "php-docblocker.alignParams": true,
+    "php-docblocker.alignReturn": true,
+    "php.docblock.packageSnippet": {
+        "@copyright": "(c) $CURRENT_YEAR Tranzakt",
+        "@author": "${name:John}",
+    },
+    "php.problems.excludeGitIgnore": true,
+    "php.version": "8.1",
+    "phpunit.phpunit": "vendor/phpunit/phpunit/phpunit",
+    "php.problems.exclude": {
+        "/*.dist.php": [
+            413
+        ],
+        "vendor/": true,
+    }
+}
