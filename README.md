@@ -9,8 +9,8 @@ so you create a Unique Index on the "name" field.
 If you create a record for 'Pete' and then (hard) delete it,
 then you can (of course) create a new record for 'Pete' without the name being duplicated.
 
-Then you decide to use Soft Deletes,
-with a `deleted_at` field which is null for non-deleted records,
+However, you then decide to use Soft Deletes,
+which adds a `deleted_at` field which is null for non-deleted records,
 and has a timestamp if the record is deleted.
 
 The idea, of course,
@@ -22,13 +22,13 @@ and still allow you to create a new (non-deleted) record for 'Pete'
 alongside the deleted version.
 You therefore want the combination of `deleted_at` and `name` to be unique,
 so you create a unique index on `['deleted_at', 'name']` expecting it to prevent duplicates,
-i.e. in your migration...
+i.e. in your migration, you replace...
 
 ``` php
 $table->string('email')->unique();
 ```
 
-is replaced with:
+with:
 
 ``` php
 $table->string('email');
@@ -36,14 +36,15 @@ $table->softDeletes();
 $table->unique(['deleted_at', 'email']);
 ```
 
-**However there is a gotcha here just waiting to getcha!**
+**However there is a gotcha here that is just waiting to getcha!**
 (and you probably won't explicitly test for this and it will be a problem waiting to happen).
 
 Unfortunately most (but not all) SQL RDBMS follow the SQL standard
 which defines every NULL value as being different from every other NULL value.
 Yes `NULL != NULL` (and that is NOT a typo!!),
 and that means that the unique index bizarrely allows you
-to have multiple rows [null, 'Pete']!!!
+to have multiple entries `[NULL, 'Pete']`!!!,
+meaning that the Unique Index does **not** prevent duplicate records from being added.
 
 **This is the problem that this package solves.**
 
@@ -137,9 +138,6 @@ that contains either '' when `deleted_at` is null, or a string representation if
 
 The `HasSoftDeletesUnique` trait creates observers on the creating, updating, deleting and restoring Eloquent actions
 and ensures that the `deleted_at_uniqueable` column is set appropriately.
-
-The softDelete functionality also has a method to turn it off,
-and SoftDeletesUnique respects this
 
 And that's all folks.
 
