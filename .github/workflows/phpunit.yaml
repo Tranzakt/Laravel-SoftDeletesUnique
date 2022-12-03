@@ -26,7 +26,8 @@ jobs:
         timeout-minutes: 5
         strategy:
             matrix:
-                os:     ubuntu-latest
+                os:
+                    -   ubuntu-latest
                 versions:
                     -   "L8/P7.4/earliest"
                     -   "L8/P7.4/latest"
