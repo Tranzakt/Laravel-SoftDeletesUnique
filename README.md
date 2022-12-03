@@ -6,20 +6,23 @@ work when you are using softDeletes on a table.
 Suppose you have a model with id and name fields -
 and you want name to be unique,
 so you create a Unique Index on the "name" field.
+If you create a record for 'Pete' and then (hard) delete it,
+then you can (of course) create a new record for 'Pete' without the name being duplicated.
+
 Then you decide to use Soft Deletes,
 with a `deleted_at` field which is null for non-deleted records,
 and has a timestamp if the record is deleted.
 
-The idea, of course, is that such models with Soft Delete
-work the same as it would without it,
+The idea, of course,
+is that models with Soft Delete work the same as it would without it,
 except that you can restore the deleted records.
-If you create a record for 'Pete' and then (hard) delete it,
-then you can (of course) create a new record for 'Pete' without the name being duplicated.
-But if you create the same record for 'Pete' and then soft delete it,
-to behave the same you should be able to create a new (non-deleted) record for 'Pete'
+But if you create a record for 'Pete' and then soft delete it,
+then you want the model to behave the same as if you had hard deleted it
+and still allow you to create a new (non-deleted) record for 'Pete'
 alongside the deleted version.
-You therefore want the combination of `deleted_at` and `name` to be unique
-so you create a unique index on ['deleted_at', 'name'] expecting it to prevent duplicates.
+You therefore want the combination of `deleted_at` and `name` to be unique,
+so you create a unique index on ['deleted_at', 'name'] expecting it to prevent duplicates,
+i.e. in your migration...
 
 ``` php
 $table->string('email')->unique();
@@ -33,12 +36,12 @@ $table->softDeletes();
 $table->unique(['deleted_at', 'email']);
 ```
 
-However there is a gotcha here just waiting to getcha,
-and you probably won't test for this and it will be a problem waiting to happen.
+**However there is a gotcha here just waiting to getcha!**
+(and you probably won't explicitly test for this and it will be a problem waiting to happen).
+
 Unfortunately most (but not all) SQL RDBMS follow the SQL standard
 which defines every NULL value as being different from every other NULL value.
-Yes (NULL != NULL),
-(and that is NOT a typo!!),
+Yes `NULL != NULL` (and that is NOT a typo!!),
 and that means that the unique index bizarrely allows you
 to have multiple rows [null, 'Pete']!!!
 
@@ -57,13 +60,14 @@ $table->softDeletesUnique();
 $table->unique(['deleted_at_uniqueable', 'email']);
 ```
 
-**Note:** When you select non-deleted records using a SoftDelete model,
-unless you use the `withTrash()` modifier
+**Note:** When you select (non-deleted) records using a SoftDeletes model,
+i.e. you don't use the `withTrash()` or `onlyTrash()` modifiers,
 Laravel's Eloquent automatically adds `WHERE deleted_at IS NULL` to the SELECT query.
-In many cases, to avoid a full table scan, you will still need some sort of index on `deleted_at`.
+In many cases, to enable the database optimiser to avoid a full table scan,
+you will likely still need some sort of index on `deleted_at`.
 Since we are now using `deleted_at_uniqueable` for the unique index,
-you will probably want to create a non-unique index on the `deleted_at` field
-as well.
+you may need to create a non-unique index on the `deleted_at` field as well,
+i.e. your migration would need to look like...
 
 ``` php
 $table->string('email');
@@ -72,7 +76,9 @@ $table->softDeletesUnique();
 $table->unique(['deleted_at_uniqueable', 'email']);
 ```
 
-## Installation
+## Installation & Usage
+
+### Installation
 
 ``` bash
 composer require Tranzakt/Laravel-SoftDeletesUnique
@@ -80,9 +86,9 @@ composer require Tranzakt/Laravel-SoftDeletesUnique
 
 Once installed, softDeletesUnique support is automatically added to migration Blueprint objects.
 
-## Usage
+### Usage
 
-In your Migrations,
+**In your Migrations...**
 
 1. Add `$table->softDeleteUnique()->after('deleted_at');`
 2. Replace `$table->unique(['deleted_at', 'column']);` with `$table->unique(['deleted_at_uniqueable', 'column']);`
@@ -102,7 +108,7 @@ public function up()
 }
 ```
 
-In your Models,
+**In your Models...**
 
 1. Add `use Tranzakt\softDeletesUnique\Concerns\HasSoftDeletesUnique;` to the header
 and `use HasSoftDeletesUnique;` to the top of the class.
@@ -115,7 +121,7 @@ class TableName extends Model {
 }
 ```
 
-As normal you can use a parameter on the `softDeletesUnique('deleted_at_str')` to create the column with a different name,
+As normal, you can use a parameter on the `softDeletesUnique('deleted_at_str')` to create the column with a different name,
 and use `CONST DELETED_AT_UNIQUEABLE = 'deleted_at_str';` in your model to tell the model what the column name is.
 
 ## How it works
