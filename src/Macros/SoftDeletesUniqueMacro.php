@@ -18,7 +18,6 @@ use SebastianBergmann\LinesOfCode\NegativeValueException;
 final class SoftDeletesUniqueMacro
 {
     /**
-use SebastianBergmann\LinesOfCode\NegativeValueException;
      * Bootstrap the schema macro.
      */
     public function register(): void
@@ -34,9 +33,7 @@ use SebastianBergmann\LinesOfCode\NegativeValueException;
             if ($precision < 0) {
                 throw New \ValueError('softDeletesUnique: optional precision must be >= 0');
             }
-            if ($precision > 0) {
-                $precision = min($precision, 6);
-            }
+            $precision = min($precision, 6);
             $maxLen = $precision > 0 ? 19 + $precision : 18;
 
             /** @var Blueprint $this */

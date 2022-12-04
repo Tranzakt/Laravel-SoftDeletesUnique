@@ -61,10 +61,81 @@ $table->softDeletesUnique();
 $table->unique(['deleted_at_uniqueable', 'email']);
 ```
 
-**Note:** When you select (non-deleted) records using a SoftDeletes model,
+## Limitations
+
+### Eloquent-only
+
+In the same way that `softDeletes` is an Eloquent function
+and only works when you are using Eloquent and not when you are using QueryBuilder or raw DB,
+this package only maintains the `deleted_at_uniqueable` column when you are using Eloquent
+(though the SQL uniqueness will be enforced if you manually maintain this column
+in the same way that you would need to manually maintain the `deleted_at` column).
+
+### Database maintained uniqueness vs. Validation
+
+This package prevents insertion of a duplicate undeleted record at an SQL database level.
+If you attempt to insert a duplicate record, an `Illuminate\Database\QueryException` will be thrown
+(which you can (obviously) catch if you wish).
+
+For user requests to create or update a record,
+most developers will likely wish to ensure that the record will be unique at the request validation stage;
+this package can be used as an alternative or in addition to this sort of validation.
+
+When restoring trashed records, or for requests not directly initiated by the user,
+the developer will need either to implement manual checks that the result will be unique
+or use this package and catch any `QueryExceptions` that result.
+
+To validate the user request in the above example,
+you would typically have the following validation in your Requests:
+
+**Pre-softDeletes:**
+
+``` php
+    public function rules()
+    {
+        return [
+            'email'=>'required|unique:users'
+        ];
+    }
+```
+
+**With softDeletes:**
+
+``` php
+    public function rules()
+    {
+        return [
+            'email'=>[
+                'required',
+                Rule:unique('users')->ignore($user)
+                    ->where(fn ($query) => $query->whereNull('deleted_at'))
+            ]
+        ];
+    }
+```
+
+**With softDeletes and softDeletesUnique:**
+
+``` php
+    public function rules()
+    {
+        return [
+            'email'=>[
+                'required',
+                Rule:unique('users')->ignore($user)
+                    ->where(fn ($query) => $query->where('deleted_at_uniqueable', ''))
+            ]
+        ];
+    }
+```
+
+### Select performance
+
+When you select (non-deleted) records using a SoftDeletes model,
 i.e. you don't use the `withTrash()` or `onlyTrash()` modifiers,
 Laravel's Eloquent automatically adds `WHERE deleted_at IS NULL` to the SELECT query.
-In many cases, to enable the database optimiser to avoid a full table scan,
+A request validation testing for uniqueness will likely generate a select statement like this under the covers.
+For these types of queries, to enable the database optimiser to avoid a full table scan
 you will likely still need some sort of index on `deleted_at`.
 Since we are now using `deleted_at_uniqueable` for the unique index,
 you may need to create a non-unique index on the `deleted_at` field as well,
@@ -72,8 +143,9 @@ i.e. your migration would need to look like...
 
 ``` php
 $table->string('email');
-$table->softDeletes()->index();
+$table->softDeletes();
 $table->softDeletesUnique();
+$table->index(['deleted_at', 'email']);
 $table->unique(['deleted_at_uniqueable', 'email']);
 ```
 

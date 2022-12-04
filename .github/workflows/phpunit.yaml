@@ -73,8 +73,8 @@ jobs:
                         ${{ runner.os }}-Ver-L${{ matrix.laravel-version }}P${{ matrix.php-version }}-
                         ${{ runner.os }}-Ver-L${{ matrix.laravel-version }}
 
-            -   if: ${{ matrix.future-versions }}
-                name: Reduce stability for future versions
+            -   name: If future version, reduce stability to match...
+                if: ${{ matrix.future-versions }}
                 run: composer config minimum-stability dev
 
             -   name: Install dependencies
