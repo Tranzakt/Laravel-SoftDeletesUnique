@@ -6,11 +6,13 @@ on:
             - "**.php"
             - "phpunit.xml.dist"
             - ".github/workflows/phpunit.yaml"
+            - "composer.json"
     push:
         paths:
             - "**.php"
             - "phpunit.xml.dist"
             - ".github/workflows/phpunit.yaml"
+            - "composer.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
