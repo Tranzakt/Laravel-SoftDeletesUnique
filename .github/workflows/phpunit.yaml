@@ -36,7 +36,7 @@ jobs:
                 phpunit-flags: ["--coverage-clover coverage.xml"]
                 include:
                     -   laravel-version: "10.x-dev"
-                        orchestra-version: "--with orchestra/testbench:8.0.x-dev"
+                        future-versions: "--with orchestra/testbench:8.0.x-dev"
                 exclude:
                     -   laravel-version: "^8.0"
                         php-version: "8.1"
@@ -71,8 +71,12 @@ jobs:
                         ${{ runner.os }}-Ver-L${{ matrix.laravel-version }}P${{ matrix.php-version }}-
                         ${{ runner.os }}-Ver-L${{ matrix.laravel-version }}
 
+            -   if: ${{ matrix.future-versions }}
+                name: Reduce stability for future versions
+                run: composer config minimum-stability dev
+
             -   name: Install dependencies
-                run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" --with laravel/framework:${{ matrix.laravel-version }} ${{ matrix.orchestra-version }} ${{ matrix.composer-prefer }}
+                run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" --with laravel/framework:${{ matrix.laravel-version }} ${{ matrix.future-versions }} ${{ matrix.composer-prefer }}
 
             -   name: Check platform requirements
                 run: composer check-platform-reqs
