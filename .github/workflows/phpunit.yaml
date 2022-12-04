@@ -92,16 +92,18 @@ jobs:
                     STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
                     MATRIX_CONTEXT: ${{ toJSON(matrix) }}
                 run: |
+                    echo "COMPOSER SHOW"
                     composer show
+                    echo
+                    echo "ENVIRONMENT"
                     env
 
             -   name: Run test suite
                 run: vendor/bin/phpunit ${{ matrix.phpunit-flags }}
 
             -   name: Upload PHPunit coverage
-                continue-on-error: true
-                uses: codecov/codecov-action@v2
+ #               continue-on-error: true
+                uses: codecov/codecov-action@v3
                 with:
-                    fail_ci_if_error: true # optional (default = false)
                     verbose: true # optional (default = false)
                     flags: unittests
