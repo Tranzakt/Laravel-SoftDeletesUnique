@@ -25,13 +25,15 @@ abstract class TestCaseSoftDeletesUnique extends Orchestra
 
     /**
      * Standardised function for creating a table
+     *
+     * @return array
      */
     protected function createTable(
         string $tableName,
         string $deleted_at = '',
         string $deleted_at_uniqueable = '',
         int    $precision = 0,
-    ): array {
+    ) {
         Model::shouldBeStrict(true);
         Schema::dropIfExists($tableName);
         Schema::create($tableName,
