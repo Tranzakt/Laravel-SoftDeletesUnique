@@ -32,6 +32,9 @@ jobs:
                 composer-prefer: ["","--prefer-lowest --prefer-stable"]
                 coverage: [xdebug]
                 phpunit-flags: ["--coverage-clover coverage.xml"]
+                include:
+                    -   laravel-version: "10.x-dev"
+                        orchestra-version: "orchestra/testbench:8.0.x-dev"
                 exclude:
                     -   laravel-version: "^8.0"
                         php-version: "8.1"
@@ -67,7 +70,7 @@ jobs:
                         ${{ runner.os }}-Ver-L${{ matrix.laravel-version }}
 
             -   name: Install dependencies
-                run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" --with laravel/framework:${{ matrix.laravel-version }} ${{ matrix.composer-prefer }}
+                run: composer update --prefer-dist --no-progress --ignore-platform-req="ext-*" --with laravel/framework:${{ matrix.laravel-version }} ${{ matrix.orchestra-version }} ${{ matrix.composer-prefer }}
 
             -   name: Check platform requirements
                 run: composer check-platform-reqs
