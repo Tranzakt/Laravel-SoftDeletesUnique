@@ -32,7 +32,7 @@ use SebastianBergmann\LinesOfCode\NegativeValueException;
         Blueprint::macro('softDeletesUnique', function (?string $column = '', ?int $precision = 0): ColumnDefinition
         {
             if ($precision < 0) {
-                throw New \ValueError('softDeletesUnique: optional precision must be between >= 0');
+                throw New \ValueError('softDeletesUnique: optional precision must be >= 0');
             }
             if ($precision > 0) {
                 $precision = min($precision, 6);
