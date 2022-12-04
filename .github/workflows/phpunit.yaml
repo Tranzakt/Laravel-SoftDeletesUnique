@@ -36,7 +36,7 @@ jobs:
                 phpunit-flags: ["--coverage-clover coverage.xml"]
                 include:
                     -   laravel-version: "10.x-dev"
-                        orchestra-version: "-with orchestra/testbench:8.0.x-dev"
+                        orchestra-version: "--with orchestra/testbench:8.0.x-dev"
                 exclude:
                     -   laravel-version: "^8.0"
                         php-version: "8.1"
