@@ -77,7 +77,7 @@ final class SoftDeletesUniqueModelsTest extends TestCaseSoftDeletesUnique
         $e = null;
         try {
             $columns = $this->createTable($tableName, precision: -1);
-        } catch (\Exception | \Error $e) {}
+        } catch (\ValueError $e) {}
         $this->assertInstanceOf(\ValueError::class, $e);
     }
 
