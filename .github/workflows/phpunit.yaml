@@ -30,7 +30,7 @@ jobs:
             fail-fast: false
             matrix:
                 os: [ubuntu-latest]
-                laravel-version: ["^8.1","^9.0","10.x-dev"]
+                laravel-version: ["^8.0","^9.0","10.x-dev"]
                 php-version: ["8.0", "8.1", "8.2"]
                 composer-prefer: ["","--prefer-lowest --prefer-stable"]
 #                composer-prefer: [""]
@@ -40,9 +40,9 @@ jobs:
                     -   laravel-version: "10.x-dev"
                         future-versions: "--with orchestra/testbench:8.0.x-dev"
                 exclude:
-                    -   laravel-version: "^8.1"
+                    -   laravel-version: "^8.0"
                         php-version: "8.1"
-                    -   laravel-version: "^8.1"
+                    -   laravel-version: "^8.0"
                         php-version: "8.2"
                     -   laravel-version: "10.x-dev"
                         php-version: "8.0"
