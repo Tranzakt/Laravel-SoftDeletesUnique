@@ -34,7 +34,6 @@ abstract class TestCaseSoftDeletesUnique extends Orchestra
         string $deleted_at_uniqueable = '',
         int    $precision = 0,
     ) {
-        Model::shouldBeStrict(true);
         Schema::dropIfExists($tableName);
         Schema::create($tableName,
             function (Blueprint $table)
