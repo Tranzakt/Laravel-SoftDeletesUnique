@@ -22,7 +22,7 @@ class TestModelSoftDeletesUnique extends Model
 
     protected $table;
 
-    public function __construct(?string|array $attributes = [])
+    public function __construct(string|array $attributes = [])
     {
         if (is_string($attributes)) {
             $this->table = $attributes;
@@ -31,7 +31,7 @@ class TestModelSoftDeletesUnique extends Model
             $this->table = $attributes['table'];
             unset($attributes['table']);
         } else {
-            $this->table = 'table_softDeletesUnique_ModelTests'
+            $this->table = 'table_softDeletesUnique_ModelTests';
         }
         parent::__construct($attributes);
     }
